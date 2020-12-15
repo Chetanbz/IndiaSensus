@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
@@ -15,8 +16,8 @@ public class CensusAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 
             ICSVBuilder<IndiaCensusCSV> csvBuilder = (new csvBuilderFactory<IndiaCensusCSV>()).createBuilder();
-            Iterator<IndiaCensusCSV> indiaCensusCSVIterator =  csvBuilder.givenCSViterator(reader,IndiaCensusCSV.class);
-            return  getCount(indiaCensusCSVIterator);
+            List<IndiaCensusCSV> indiaCensusCSVList =  csvBuilder.givenCSVList(reader,IndiaCensusCSV.class);
+            return  indiaCensusCSVList.size();
         }
         catch (RuntimeException e){
             throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.DATA_IMPROPER);
