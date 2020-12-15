@@ -13,8 +13,7 @@ import java.util.stream.StreamSupport;
 public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-            CsvToBean<IndiaCensusCSV> csvToBean = new CsvToBeanBuilder<IndiaCensusCSV>(reader).withType(IndiaCensusCSV.class).withIgnoreLeadingWhiteSpace(true).build();
-            Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();
+            Iterator<IndiaCensusCSV> censusCSVIterator = getIterator(reader,IndiaCensusCSV.class);
             Iterable<IndiaCensusCSV> csvIterable = () -> censusCSVIterator;
             int namOfEnteries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
             return namOfEnteries;
@@ -33,8 +32,7 @@ public class CensusAnalyser {
     }
     public int loadIndiaStateData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-            CsvToBean<CSVState> csvToBean = new CsvToBeanBuilder<CSVState>(reader).withType(CSVState.class).withIgnoreLeadingWhiteSpace(true).build();
-            Iterator<CSVState> censusCSVIterator = csvToBean.iterator();
+            Iterator<CSVState> censusCSVIterator = getIterator(reader,CSVState.class);
             Iterable<CSVState> csvIterable = () -> censusCSVIterator;
             int namOfEnteries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
             return namOfEnteries;
@@ -51,5 +49,8 @@ public class CensusAnalyser {
         }
 
     }
-
+    private <E> Iterator<E> getIterator(Reader reader, Class csvClass) throws  CensusAnalyserException{
+        CsvToBean<E> csvToBean = new CsvToBeanBuilder<E>(reader).withType(csvClass).withIgnoreLeadingWhiteSpace(true).build();
+        return  csvToBean.iterator();
+    }
 }
