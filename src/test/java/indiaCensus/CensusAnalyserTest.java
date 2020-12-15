@@ -10,7 +10,9 @@ public class CensusAnalyserTest {
     private static final String WRONG_CSV_FILE_PATH = "./src/main/resources/IndiaStateCensusData.csv";
     private static final String WRONG_FILE_TYPE = "./src/main/resources/IndiaStateCensusData.txt";
     private static final String DELIMINATOR_MISS = "D:\\eclipse-java-2020-09-R-win32-x86_64\\Week3,Workspace Eclipse\\SensusIndia\\src\\test\\resources\\IndiaStateCensusDataDelimininatorMiss.csv";
-
+    //***
+    private static final String INDIA_STATE_CODE = "D:\\eclipse-java-2020-09-R-win32-x86_64\\Week3,Workspace Eclipse\\SensusIndia\\src\\test\\resources\\IndiaStateCode.csv";
+    private static final String DELIMINATOR_MISS_State_Code ="D:\\eclipse-java-2020-09-R-win32-x86_64\\Week3,Workspace Eclipse\\SensusIndia\\src\\test\\resources\\IndiaStateCodeDilimatorMiss.csv";
     @Test
     public void givenIndianCensusCSVFileReturnsCorrectRecords() {
         try {
@@ -65,5 +67,62 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.DATA_IMPROPER,e.type);
         }
     }
+    //************
+    @Test
+    public void givenStateCSVFileReturnsCorrectRecords() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            int numOfRecords = censusAnalyser.loadIndiaStateData(INDIA_STATE_CODE);
+            Assert.assertEquals(37,numOfRecords);
+        } catch (CensusAnalyserException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void givenState_WithWrongFile_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndiaStateData(WRONG_CSV_FILE_PATH);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
+        }
+    }
+    @Test
+    public void givenIndiaStateData_WithWrongFileType_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndiaStateData(WRONG_FILE_TYPE);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE,e.type);
+        }
+
+    }
+    @Test
+    public void givenIndiaStateData_WithDeliminatorMiss_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndiaStateData(DELIMINATOR_MISS_State_Code);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.DATA_IMPROPER,e.type);
+        }
+    }
+    @Test
+    public void givenIndiaStateData_WithHeaderrMiss_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndiaStateData(DELIMINATOR_MISS_State_Code);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.DATA_IMPROPER,e.type);
+        }
+    }
+
 
 }
