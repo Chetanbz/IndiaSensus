@@ -75,6 +75,15 @@ public class CensusAnalyser {
         String sortedStateCensusJason = new Gson().toJson(censusCSVList);
         return sortedStateCensusJason;
     }
+    public String getSortedPopulousDensityList() throws CensusBuilderException {
+        if(censusCSVList.size() == 0){
+            throw new CensusBuilderException("Invalid File", CensusBuilderException.ExceptionType.No_DATA);
+        }
+        Comparator <IndiaCensusCSV> censusCSVComparator = Comparator.comparing(Census -> Census.densityPerSqKm);
+        this.sort(censusCSVComparator);
+        String sortedStateCensusJason = new Gson().toJson(censusCSVList);
+        return sortedStateCensusJason;
+    }
 
     public String getSortedStateCodeList() throws CensusBuilderException {
         if(stateCSVList.size() == 0){
@@ -111,5 +120,6 @@ public class CensusAnalyser {
             }
         }
     }
+
 
 }
